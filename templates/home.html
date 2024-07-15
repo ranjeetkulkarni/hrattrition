@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Attrition Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <script>
+        function prepareDataAndSubmit() {
+            var data = {};
+            
+            // Extract values from form fields
+            data['Age'] = document.getElementById('Age').value;
+            data['DailyRate'] = document.getElementById('DailyRate').value;
+            data['DistanceFromHome'] = document.getElementById('DistanceFromHome').value;
+            data['HourlyRate'] = document.getElementById('HourlyRate').value;
+            data['MonthlyIncome'] = document.getElementById('MonthlyIncome').value;
+            data['MonthlyRate'] = document.getElementById('MonthlyRate').value;
+            data['TotalWorkingYears'] = document.getElementById('TotalWorkingYears').value;
+            data['TrainingTimesLastYear'] = document.getElementById('TrainingTimesLastYear').value;
+            data['YearsAtCompany'] = document.getElementById('YearsAtCompany').value;
+            data['YearsInCurrentRole'] = document.getElementById('YearsInCurrentRole').value;
+            data['YearsSinceLastPromotion'] = document.getElementById('YearsSinceLastPromotion').value;
+            data['YearsWithCurrManager'] = document.getElementById('YearsWithCurrManager').value;
+            data['BusinessTravel_Travel_Frequently'] = (document.getElementById('BusinessTravel').value === 'Travel_Frequently') ? 1 : 0;
+            data['BusinessTravel_Travel_Rarely'] = (document.getElementById('BusinessTravel').value === 'Travel_Rarely') ? 1 : 0;
+            data['Department_Research & Development'] = (document.getElementById('Department').value === 'Research & Development') ? 1 : 0;
+            data['Department_Sales'] = (document.getElementById('Department').value === 'Sales') ? 1 : 0;
+            data['EducationField_Life Sciences'] = (document.getElementById('EducationField').value === 'Life Sciences') ? 1 : 0;
+            data['EducationField_Marketing'] = (document.getElementById('EducationField').value === 'Marketing') ? 1 : 0;
+            data['EducationField_Medical'] = (document.getElementById('EducationField').value === 'Medical') ? 1 : 0;
+            data['EducationField_Other'] = (document.getElementById('EducationField').value === 'Other') ? 1 : 0;
+            data['EducationField_Technical Degree'] = (document.getElementById('EducationField').value === 'Technical Degree') ? 1 : 0;
+            data['Gender_Male'] = (document.getElementById('Gender').value === 'Male') ? 1 : 0;
+            data['JobRole_Human Resources'] = (document.getElementById('JobRole').value === 'Human Resources') ? 1 : 0;
+            data['JobRole_Laboratory Technician'] = (document.getElementById('JobRole').value === 'Laboratory Technician') ? 1 : 0;
+            data['JobRole_Manager'] = (document.getElementById('JobRole').value === 'Manager') ? 1 : 0;
+            data['JobRole_Manufacturing Director'] = (document.getElementById('JobRole').value === 'Manufacturing Director') ? 1 : 0;
+            data['JobRole_Research Director'] = (document.getElementById('JobRole').value === 'Research Director') ? 1 : 0;
+            data['JobRole_Research Scientist'] = (document.getElementById('JobRole').value === 'Research Scientist') ? 1 : 0;
+            data['JobRole_Sales Executive'] = (document.getElementById('JobRole').value === 'Sales Executive') ? 1 : 0;
+            data['JobRole_Sales Representative'] = (document.getElementById('JobRole').value === 'Sales Representative') ? 1 : 0;
+            data['MaritalStatus_Married'] = (document.getElementById('MaritalStatus').value === 'Married') ? 1 : 0;
+            data['MaritalStatus_Single'] = (document.getElementById('MaritalStatus').value === 'Single') ? 1 : 0;
+            data['OverTime_Yes'] = (document.getElementById('OverTime').value === 'Yes') ? 1 : 0;
+
+            // Convert data object to JSON and submit form
+            var jsonData = JSON.stringify({ 'data': data });
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/predict_api', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var predictionText = response.prediction === 1 ? 'YES' : 'NO';
+                    document.getElementById('prediction_result').textContent = 'Is there risk of Attrition: ' + predictionText;
+                }
+            };
+            xhr.send(jsonData);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict Employee Attrition</h1>
+        <form onsubmit="event.preventDefault(); prepareDataAndSubmit();" class="prediction-form">
+            <!-- Input fields for numerical variables -->
+            <label for="Age">Age:</label>
+            <input type="number" id="Age" name="Age" required><br>
+
+            <label for="DailyRate">Daily Rate:</label>
+            <input type="number" id="DailyRate" name="DailyRate" required><br>
+
+            <label for="DistanceFromHome">Distance From Home:</label>
+            <input type="number" id="DistanceFromHome" name="DistanceFromHome" required><br>
+
+            <label for="HourlyRate">Hourly Rate:</label>
+            <input type="number" id="HourlyRate" name="HourlyRate" required><br>
+
+            <label for="MonthlyIncome">Monthly Income:</label>
+            <input type="number" id="MonthlyIncome" name="MonthlyIncome" required><br>
+
+            <label for="MonthlyRate">Monthly Rate:</label>
+            <input type="number" id="MonthlyRate" name="MonthlyRate" required><br>
+
+            <label for="TotalWorkingYears">Total Working Years:</label>
+            <input type="number" id="TotalWorkingYears" name="TotalWorkingYears" required><br>
+
+            <label for="TrainingTimesLastYear">Training Times Last Year:</label>
+            <input type="number" id="TrainingTimesLastYear" name="TrainingTimesLastYear" required><br>
+
+            <label for="YearsAtCompany">Years At Company:</label>
+            <input type="number" id="YearsAtCompany" name="YearsAtCompany" required><br>
+
+            <label for="YearsInCurrentRole">Years In Current Role:</label>
+            <input type="number" id="YearsInCurrentRole" name="YearsInCurrentRole" required><br>
+
+            <label for="YearsSinceLastPromotion">Years Since Last Promotion:</label>
+            <input type="number" id="YearsSinceLastPromotion" name="YearsSinceLastPromotion" required><br>
+
+            <label for="YearsWithCurrManager">Years With Current Manager:</label>
+            <input type="number" id="YearsWithCurrManager" name="YearsWithCurrManager" required><br>
+
+            <!-- Input fields for categorical variables -->
+            <label for="BusinessTravel">Business Travel:</label>
+            <select id="BusinessTravel" name="BusinessTravel" required>
+                <option value="Travel_Rarely">Travel Rarely</option>
+                <option value="Travel_Frequently">Travel Frequently</option>
+                <option value="Non-Travel">Non-Travel</option>
+            </select><br>
+
+            <label for="Department">Department:</label>
+            <select id="Department" name="Department" required>
+                <option value="Research & Development">Research & Development</option>
+                <option value="Sales">Sales</option>
+            </select><br>
+
+            <label for="EducationField">Education Field:</label>
+            <select id="EducationField" name="EducationField" required>
+                <option value="Life Sciences">Life Sciences</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Medical">Medical</option>
+                <option value="Other">Other</option>
+                <option value="Technical Degree">Technical Degree</option>
+            </select><br>
+
+            <label for="Gender">Gender:</label>
+            <select id="Gender" name="Gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select><br>
+
+            <label for="JobRole">Job Role:</label>
+            <select id="JobRole" name="JobRole" required>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Laboratory Technician">Laboratory Technician</option>
+                <option value="Manager">Manager</option>
+                <option value="Manufacturing Director">Manufacturing Director</option>
+                <option value="Research Director">Research Director</option>
+                <option value="Research Scientist">Research Scientist</option>
+                <option value="Sales Executive">Sales Executive</option>
+                <option value="Sales Representative">Sales Representative</option>
+            </select><br>
+
+            <label for="MaritalStatus">Marital Status:</label>
+            <select id="MaritalStatus" name="MaritalStatus" required>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Divorced">Divorced</option>
+            </select><br>
+
+            <label for="OverTime">Over Time:</label>
+            <select id="OverTime" name="OverTime" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select><br>
+
+            <input type="submit" value="Predict">
+        </form>
+        <p id="prediction_result"></p>
+    </div>
+</body>
+</html>
