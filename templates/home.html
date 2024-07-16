@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Employee Attrition Prediction</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
+    <style>
+        /* Additional CSS styles can be added here */
+    </style>
     <script>
         function prepareDataAndSubmit() {
             var data = {};
@@ -53,8 +55,8 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
-                    var predictionText = response.prediction === 1 ? 'YES' : 'NO';
-                    document.getElementById('prediction_result').textContent = 'Is there risk of Attrition: ' + predictionText;
+                    var predictionText = response.prediction === 0 ? 'NO' : 'YES';
+                    document.getElementById('prediction_result').textContent = 'IS THERE RISK OF ATTRITION: ' + predictionText;
                 }
             };
             xhr.send(jsonData);
@@ -72,7 +74,7 @@
             <label for="DailyRate">Daily Rate:</label>
             <input type="number" id="DailyRate" name="DailyRate" required><br>
 
-            <label for="DistanceFromHome">Distance From Home:</label>
+            <label for="DistanceFromHome">Distance From Home (km):</label>
             <input type="number" id="DistanceFromHome" name="DistanceFromHome" required><br>
 
             <label for="HourlyRate">Hourly Rate:</label>
